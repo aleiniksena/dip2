@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="background" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.resources.fxml.MainController">
+   <top>
+      <MenuBar fx:id="menuBar" BorderPane.alignment="TOP_LEFT" />
+   </top>
+   <left>
+      <VBox prefHeight="575.0" prefWidth="200.0" spacing="10.0" styleClass="menu-bar" stylesheets="@DarkTheme.css" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="clientsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="180.0" text="Клиенты" />
+            <Button fx:id="gymsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="180.0" text="Залы" />
+            <Button fx:id="scheduleButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="180.0" text="Расписание" />
+            <Button fx:id="profilesButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="180.0" text="Программы" />
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets left="10.0" top="20.0" />
+         </padding>
+      </VBox>
+   </left>
+</BorderPane>

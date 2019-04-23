@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane styleClass="background" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.resources.fxml.ClientProfileController">
+   <children>
+      <VBox spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TableView fx:id="resultTable" VBox.vgrow="ALWAYS">
+              <columns>
+                <TableColumn fx:id="colName" editable="false" maxWidth="-1.0" minWidth="200.0" prefWidth="200.0" text="ФИО" />
+                  <TableColumn fx:id="colStartWeight" editable="false" maxWidth="1.7976931348623157E308" minWidth="60.0" prefWidth="60.0" text="Вес" />
+                  <TableColumn fx:id="colEndWeight" maxWidth="-1.0" minWidth="60.0" prefWidth="60.0" text="Цель" />
+                  <TableColumn fx:id="colStartDate" maxWidth="1.7976931348623157E308" minWidth="-1.0" prefWidth="100.0" text="Старт" />
+                  <TableColumn fx:id="colOptimisticDate" prefWidth="100.0" text="Мин" />
+                  <TableColumn fx:id="colAverageDate" prefWidth="100.0" text="Средн" />
+                  <TableColumn fx:id="colPessimisticDate" prefWidth="110.0" text="Макс" />
+              </columns>
+            </TableView>
+            <HBox spacing="15.0">
+               <children>
+                  <Button fx:id="add" mnemonicParsing="false" prefWidth="144.0" text="Добавить" />
+                  <Button fx:id="delete" mnemonicParsing="false" prefWidth="144.0" text="Удалить" />
+                  <Button fx:id="edit" mnemonicParsing="false" prefWidth="144.0" text="Редактировать" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="15.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

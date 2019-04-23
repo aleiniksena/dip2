@@ -1,0 +1,160 @@
+.background {
+    -fx-background-color: derive(#7eafc1,20%);
+}
+
+.label {
+    -fx-font-size: 10pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #fbfcfc;
+    -fx-opacity: 0.6;
+}
+
+.label-data {
+    -fx-font-size: 10pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #32464d;
+    -fx-opacity: 1;
+}
+
+
+.label-bright {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #ffffff;
+    -fx-opacity: 1;
+}
+.label-header {
+    -fx-font-size: 30pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: #ffffff;
+    -fx-opacity: 1;
+}
+
+.table-view {
+    -fx-base: #689389;
+    -fx-control-inner-background: #689389;
+    -fx-background-color: #689389;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+    -fx-padding: 5;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-size: 20;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color: transparent;
+    -fx-border-color:
+            transparent
+            transparent
+            derive(-fx-base, 80%)
+            transparent;
+    -fx-border-insets: 0 10 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #ffffff;
+    -fx-alignment: center-left;
+    -fx-opacity: 1;
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: -fx-focus-color;
+}
+
+.split-pane-divider {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.split-pane > .split-pane-divider {
+    -fx-padding: 0 0 0 0;
+}
+
+.menu-bar {
+    -fx-background-color: #1d576d;
+}
+
+.context-menu {
+    -fx-background-color: derive(#656278,50%);
+}
+
+.menu-bar .label {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: #ffffff;
+    -fx-opacity: 0.9;
+}
+
+.menu .left-container {
+    -fx-background-color: black;
+}
+
+.menu:hover {
+    -fx-background-color: #627865;
+}
+
+.menu:pressed, .menu:default:hover:pressed {
+    -fx-background-color: #3a3a3a;
+    -fx-text-fill: #656278;
+}
+
+.text-field {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Semibold";
+}
+
+.combo-box-base {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Semibold";
+}
+
+/*
+ * Push Button в стиле Metro
+ * Автор: Pedro Duque Vieira
+ * http://pixelduke.wordpress.com/2012/10/23/jmetro-windows-8-controls-on-java/
+ */
+.button {
+    -fx-padding: 5 22 5 22;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: #648c9a;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 11pt;
+    -fx-text-fill: #ffffff;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.button:hover {
+    -fx-background-color: #718574;
+}
+
+.button:pressed, .button:default:hover:pressed {
+    -fx-background-color: #3a3a3a;
+    -fx-text-fill: #656278;
+}
+
+.button:disabled, .button:default:disabled {
+    -fx-opacity: 0.4;
+    -fx-background-color: #656278;
+    -fx-text-fill: white;
+}
+
+.button:default {
+    -fx-background-color: -fx-focus-color;
+    -fx-text-fill: #ffffff;
+}
+
+.button:default:hover {
+    -fx-background-color: derive(-fx-focus-color,30%);
+}
+
+.date-picker-popup > .month-year-pane {
+    -fx-background-color: #648c9a;
+}

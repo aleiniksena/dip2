@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="background" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.resources.fxml.GymsController">
+   <children>
+      <TableView fx:id="resultTable" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columns>
+          <TableColumn fx:id="colName" editable="false" maxWidth="-1.0" minWidth="150.0" prefWidth="150.0" text="Название" />
+            <TableColumn fx:id="colAddress" editable="false" maxWidth="1.7976931348623157E308" minWidth="150.0" prefWidth="200.0" text="Адрес" />
+            <TableColumn fx:id="colPhone" maxWidth="-1.0" minWidth="120.0" prefWidth="120.0" text="Телефон" />
+            <TableColumn fx:id="colSchedule" maxWidth="-1.0" minWidth="130.0" prefWidth="130.0" text="Расписание" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
