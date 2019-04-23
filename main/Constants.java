@@ -130,7 +130,7 @@ public class Constants {
     public static final String level0 = "Выраженный дефицит массы тела";
     public static final String level1 = "Недостаточная масса тела";
     public static final String level2 = "Нормальная масса тела";
-    public static final String level3 = "Избыточная масса тела (предожирение)";
+    public static final String level3 = "Предожирение";
     public static final String level4 = "Ожирение 1й степени";
     public static final String level5 = "Ожирение 2й степени";
     public static final String level6 = "Ожирение 3й степени";

@@ -4,6 +4,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import main.CalendarHelper;
 import main.Constants;
 
 import java.time.LocalDate;
@@ -90,6 +91,11 @@ public class Client implements Comparable<Client>{
     }
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public int getFullAgeYears(){
+        int result = CalendarHelper.getDateDiffYears(getBirthDate(), CalendarHelper.now());
+        return result;
     }
 
     //Registration date

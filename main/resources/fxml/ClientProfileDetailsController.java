@@ -13,7 +13,6 @@ import main.Constants;
 import main.TextFieldHelper;
 import main.model.Client;
 import main.model.ClientProfile;
-import java.util.Optional;
 
 public class ClientProfileDetailsController extends CommonController{
     @FXML
@@ -197,9 +196,7 @@ public class ClientProfileDetailsController extends CommonController{
         );
 
         this.startProgramDateValue.valueProperty().addListener((ov, oldValue, newValue) ->{
-            if (newValue != oldValue){
                 recalcFields();
-            }
         });
 
         this.heightValue.textProperty().addListener(new ChangeListener<String>() {
@@ -246,8 +243,7 @@ public class ClientProfileDetailsController extends CommonController{
     }
 
     private void recalcFields(){
-
-        System.out.println(this.clientProfile.toString());
+        System.out.println("recalcFields(): " + this.clientProfile.toString());
 
         if ((this.clientProfile != null) && (this.clientProfile.getClient() != null)) {
 

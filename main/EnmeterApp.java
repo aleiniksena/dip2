@@ -178,13 +178,13 @@ public class EnmeterApp extends Application {
         this.mainAppController.setMainApp(this);
 
         //Load gyms
-        this.getDbManager().insertGyms(this.generateGyms());
+        //this.getDbManager().insertGyms(this.generateGyms());
         this.setGymsData(this.getDbManager().loadGyms());
         this.gymsController.setGymsData(this.getGymsData());
 
         //Load clients
-        getDbManager().deleteAllClients();
-        getDbManager().insertClients(generateClients());
+        //getDbManager().deleteAllClients();
+        //getDbManager().insertClients(generateClients());
         getDbManager().insertClientContacts(getDbManager().loadClients());
         this.clientsController.setClientsData(this.getClientsData());
         this.setClientsProfilesData(this.getDbManager().loadClientsProfiles(this));

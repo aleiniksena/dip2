@@ -76,13 +76,14 @@ public class DbManager {
                 while (resContact.next()){
 
                     int type = resContact.getInt("contypeid");
-
                     if (type == 1)
+
                         c.setEmail(resContact.getString("contact"));
                     else
                         c.setPhone(resContact.getString("contact"));
                 }
                 result.add(c);
+                System.out.println("loadClients(): " + c.toString());
             }
         }catch (SQLException e) {
             e.printStackTrace();

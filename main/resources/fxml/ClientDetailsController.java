@@ -118,6 +118,8 @@ public class ClientDetailsController extends CommonController{
         this.setMiddleNameValue(currentClient.getMiddleName());
         this.setPhoneValue(currentClient.getPhone());
         this.setNumberValue(String.valueOf(currentClient.getId()));
+
+        System.out.println("setClient: " + c.toString());
     }
 
     @FXML

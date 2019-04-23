@@ -154,7 +154,7 @@ public class ClientsController extends CommonController{
             currentClient = new Client();
         }
 
-        System.out.println(currentClient.toString());
+        System.out.println("syncFields(): " + currentClient.toString());
         this.setSurnameValue(currentClient.getSurname());
         this.setNameValue(currentClient.getName());
         this.setBirthDateValue(currentClient.getBirthDate());

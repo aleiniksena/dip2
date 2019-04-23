@@ -6,6 +6,7 @@ import main.CalendarHelper;
 import main.Constants;
 import main.EnmeterApp;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class ClientProfile implements Comparable<ClientProfile>{
     private EnmeterApp mainApp;
     private Client client;
     private int clientId;
-    private double mHeight;
+    private int mHeight;
     private int startWeight;
     private int goalWeight;
     private LocalDate programStartDate;
@@ -107,10 +108,10 @@ public class ClientProfile implements Comparable<ClientProfile>{
 
     //Height property
     public int getHeight(){
-        return (int)Math.round(this.mHeight * 100);
+        return this.mHeight;
     }
     public void setHeight(int height){
-            this.mHeight = height / 100;
+            this.mHeight = height;
     }
 
 
@@ -192,25 +193,33 @@ public class ClientProfile implements Comparable<ClientProfile>{
     }
 
     //Calculated basic energy level
+    /*
+    *   Для мужчин - BMR = 88.362 + (13.397 x вес в кг) + (4.799 x рост в сантиметрах) - (5.677 x возраст в годах)
+        Для женщин - BMR = 447.593 + (9.247 x вес в кг) + (3.098 x рост в сантиметрах) - (4.330 x возраст в годах)
+    * */
     public int getBasicEnergyLevel(){
-        int bel = 0;
+        double bel = 0;
 
-        if ((client != null) && (client.getSex().equals(Constants.sexFemale))){
-            bel = 0;
-        } else{
-            bel = 1;
+        if (client != null) {
+            if (client.getSex().equals(Constants.sexFemale)) {
+                bel = 447.593 + this.getGoalWeight() * 9.247 + 3.098 * this.getHeight() - 4.330 * client.getFullAgeYears();
+            } else {
+                bel = 88.362 + (13.397 * this.getGoalWeight()) + (4.799 * this.getHeight())
+                        - 5.677 * client.getFullAgeYears();
+            }
         }
-        return bel;
+        System.out.println("Calculated bel: " + bel);
+        return (int) Math.round(bel);
     }
 
     //Calculate extra mass index
     public String getEmi(){
-        System.out.println(String.format("Height %f, weight %d", mHeight, startWeight));
+        System.out.println(String.format("Height %d, weight %d", mHeight, startWeight));
         StringBuffer res = new StringBuffer();
 
         if (mHeight > 0) {
-            double result = startWeight / Math.pow(mHeight, 2);
-            res.append(result).append("(");
+            double result = startWeight / Math.pow(mHeight/100.0, 2.0);
+            res.append(new DecimalFormat("##.0").format(result)).append("(");
 
             if (result < 16) {
                 res.append(Constants.level0);
