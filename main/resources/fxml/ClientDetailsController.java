@@ -1,16 +1,20 @@
 package main.resources.fxml;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import main.Alerts;
-import main.CalendarHelper;
-import main.Constants;
+import javafx.util.StringConverter;
+import main.*;
 import main.model.Client;
+
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.Calendar;
 
 
 public class ClientDetailsController extends CommonController{
@@ -134,14 +138,16 @@ public class ClientDetailsController extends CommonController{
                 if (Alerts.showConfirmationAlert("", Constants.msgSaveChanges) == ButtonType.OK){
                     System.out.println("Current client before save: " + currentClient.toString());
 
-                    if (email.getText() == "" ||
-                    phone.getText() == "" ||
-                    sex.getValue() == null ||
-                    CalendarHelper.getSelectedDate(birthDate) == null ||
-                            CalendarHelper.getSelectedDate(registrationDate)== null ||
-                    surname.getText() == "" ||
-                    middleName.getText() == ""){
-                        Alerts.showInvalidDataAlert();
+                    StringBuffer b = new StringBuffer();
+
+                    if (!TextFieldHelper.isFieldValid(email, "  Email: ", b)||
+                            !TextFieldHelper.isFieldValid(phone, "  Телефон: ", b) ||
+                            !new ComboBoxFieldHelper<String>().isFieldValid(sex, "  Пол: ", b) ||
+                            !CalendarHelper.isFieldValid(birthDate, "   Дата рождения: ", b)||
+                            !CalendarHelper.isFieldValid(registrationDate, "    Дата регистрации: ", b)||
+                            !TextFieldHelper.isFieldValid(surname, "    Фамилия: ", b) ||
+                            !TextFieldHelper.isFieldValid(middleName, " Отчество: ", b)) {
+                        Alerts.showInvalidDataAlert(b.toString());
 
                     }else {
                         currentClient.setEmail(email.getText());
@@ -168,5 +174,24 @@ public class ClientDetailsController extends CommonController{
         });
 
         this.setSexTypes();
+
+        this.birthDate.getEditor().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (newValue.matches(Constants.rexepDate)){
+                    birthDate.setValue(CalendarHelper.parseDate(newValue));
+                }
+            }
+        });
+
+        this.registrationDate.getEditor().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (newValue.matches(Constants.rexepDate)){
+                    registrationDate.setValue(CalendarHelper.parseDate(newValue));
+                }
+            }
+        });
+
     }
 }

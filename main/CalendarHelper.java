@@ -12,6 +12,8 @@ import java.util.Date;
 
 public class CalendarHelper {
 
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(Constants.dateFormat);
+
     public static LocalDate addMonthsToDate(LocalDate d, int nMonths){
         LocalDate res = null;
 
@@ -135,9 +137,18 @@ public class CalendarHelper {
     }
 
     public static LocalDate getSelectedDate(DatePicker p){
-        String s = p.getEditor().getText();
-        LocalDate result = parseDate(s);
-        System.out.println("Parsed selected date: source = " + s + " parsed into = " + result);
+        LocalDate result = p.getValue();
+        System.out.println("Selected local date: " + result);
+        return result;
+    }
+
+    public static boolean isFieldValid(DatePicker p, String fieldName, StringBuffer b){
+        boolean result = (getSelectedDate(p) != null);
+
+        if (!result){
+            b.append(fieldName).append(" null");
+        }
+
         return result;
     }
 

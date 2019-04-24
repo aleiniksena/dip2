@@ -39,23 +39,23 @@ public class Constants {
     //Database manager constants
     public static final String dbPath = "/main/resources/database/enmeter_db.db";
     public static final String dbDriverType = "jdbc:sqlite";
-    public static final String sqlCheckUser = "SELECT COUNT(*) FROM users WHERE login = ? AND password = ?;";
+    public static final String sqlCheckUser = "SELECT COUNT(*) FROM users WHERE login = '%s' AND password = '%s'";
     public static final String sqlGetAllClients = "SELECT * FROM client c;";
     public static final String sqlGetAllGyms = "SELECT * FROM gym g;";
     public static final String sqlGetAllSchedules = "SELECT * FROM client_gym_schedule c;";
     public static final String sqlGetAllClientsProfiles = "SELECT * FROM client_profile c;";
-    public static final String sqlInsertClients1 = "INSERT INTO client (name, surname, middlename, birthdate, regdate, sex, active) VALUES";
-    public static final String sqlInsertClientsProfile = "INSERT INTO client_profile (client_id, profile_id, height, start_date, start_weight, goal) VALUES";
+    public static final String sqlInsertClients1 = "INSERT INTO client (name, surname, middlename, birthdate, regdate, sex, active) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');";
+    public static final String sqlInsertClientsProfile = "INSERT INTO client_profile (client_id, height, start_date, start_weight, goal) VALUES ('%d', '%d', '%s', '%d', '%d');";
     public static final String sqlDeleteClient = "DELETE FROM client WHERE id = %d;";
     public static final String sqlDeleteSchedule = "DELETE FROM client_gym_schedule WHERE client_id = %d AND gym_id = %d AND wday = %d AND time ='%s';";
-    public static final String sqlDeleteClientProfile = "DELETE FROM client_profile WHERE id =%d;";
+    public static final String sqlDeleteClientProfile = "DELETE FROM client_profile WHERE profile_id =%d;";
     public static final String sqlDeleteAllClients = "DELETE FROM client;";
     public static final String sqlDeleteAllGyms = "DELETE FROM gym;";
-    public static final String sqlStoreClientContacts = "INSERT INTO client_contact (client_id, contypeid, contact) VALUES";
+    public static final String sqlInsertClientContacts = "INSERT INTO client_contact (contact, client_id, contypeid) VALUES ('%s', %d, %d);";
     public static final String sqlUpdateClientContacts = "UPDATE client_contact SET contact = '%s' WHERE client_id = %d AND contypeid = %d";
     public static final String sqlGetContact = "SELECT * FROM client_contact WHERE client_id = %d;";
-    public static final String sqlInsertGym = "INSERT INTO gym (name, address, schedule, phone) VALUES";
-    public static final String sqlInsertSchedule = "INSERT INTO client_gym_schedule (client_id, gym_id, time, wday) VALUES";
+    public static final String sqlInsertGym = "INSERT INTO gym (name, address, schedule, phone) VALUES ('%s', '%s', '%s', '%s');";
+    public static final String sqlInsertSchedule = "INSERT INTO client_gym_schedule (client_id, gym_id, time, wday) VALUES ('%s', '%s', '%s', '%s');";
     public static final String sqlUpdateClient = "UPDATE client SET name='%s', surname = '%s', middlename='%s', birthdate='%s', sex='%s', active='%s' WHERE id=%d;";
     public static final String sqlUpdateClientProfile = "UPDATE client_profile SET height='%d', start_date = '%s', start_weight='%d', goal='%d' WHERE profile_id=%d;";
     public static final String sqlGetClientTrainingsNumber = "SELECT COUNT(*) FROM client_gym_schedule WHERE client_id = %d;";
@@ -70,6 +70,7 @@ public class Constants {
 
     //Client details view constants
     public static final String msgDeleteClient = "Удалить клиента?";
+    public static final String rexepDate = "\\d{1,2}[\\.]\\d{1,2}[\\.]\\d{4}";
 
     //Common alert view constants
     public static final String msgConfirmTitle = "Подтвердите действие";

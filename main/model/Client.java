@@ -89,7 +89,9 @@ public class Client implements Comparable<Client>{
     public LocalDate getBirthDate() {
         return birthDate;
     }
+
     public void setBirthDate(LocalDate birthDate) {
+        System.out.println("Set birthdate to : " + String.valueOf(birthDate));
         this.birthDate = birthDate;
     }
 

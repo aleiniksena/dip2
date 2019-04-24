@@ -11,7 +11,6 @@ import main.Constants;
 import main.model.DisplayedSchedule;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ScheduleController extends CommonController{
         @FXML
@@ -28,6 +27,8 @@ public class ScheduleController extends CommonController{
         private TableColumn<DisplayedSchedule, String> colTime;
         @FXML
         private TableColumn<DisplayedSchedule, String> colGym;
+        @FXML
+        private TableColumn<DisplayedSchedule, Integer> colClientId;
 
         private ObservableList<DisplayedSchedule> scheduleData = FXCollections.observableArrayList();
 
@@ -37,6 +38,7 @@ public class ScheduleController extends CommonController{
         this.colDay.setCellValueFactory(cellData -> cellData.getValue().getDayProperty());
         this.colTime.setCellValueFactory(cellData -> cellData.getValue().getTimeProperty());
         this.colGym.setCellValueFactory(cellData -> cellData.getValue().getGymProperty(getMainApp()));
+        this.colClientId.setCellValueFactory(cellData -> cellData.getValue().getClientIdProperty().asObject());
         this.resultTable.setItems(this.scheduleData);
 
         this.add.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){

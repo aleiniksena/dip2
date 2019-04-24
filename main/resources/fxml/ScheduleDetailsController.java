@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 import main.Alerts;
+import main.ComboBoxFieldHelper;
 import main.Constants;
 import main.model.Client;
 import main.model.DisplayedSchedule;
@@ -80,16 +81,12 @@ public class ScheduleDetailsController extends CommonController{
         this.saveButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent mouseEvent) {
-                boolean incorrectData = false;
+                StringBuffer b = new StringBuffer();
 
-                if ((client.getSelectionModel().getSelectedItem() == null) ||
-                        (gym.getSelectionModel().getSelectedItem() == null) ||
-                        (wday.getSelectionModel().getSelectedIndex() == -1)){
-                    incorrectData = true;
-                }
-
-                if (incorrectData){
-                    Alerts.showInvalidDataAlert();
+                if (!new ComboBoxFieldHelper<Client>().isFieldValid(client, "Клиент: ", b) ||
+                        !new ComboBoxFieldHelper<Gym>().isFieldValid(gym, "Зал: ", b)||
+                                !new ComboBoxFieldHelper<String>().isFieldValid(wday, "День недели: ", b)){
+                    Alerts.showInvalidDataAlert(b.toString());
                 } else{
                         DisplayedSchedule s = new DisplayedSchedule();
                         s.setTime(time.getText());

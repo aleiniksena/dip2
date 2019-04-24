@@ -183,9 +183,9 @@ public class EnmeterApp extends Application {
         this.gymsController.setGymsData(this.getGymsData());
 
         //Load clients
-        //getDbManager().deleteAllClients();
-        //getDbManager().insertClients(generateClients());
-        getDbManager().insertClientContacts(getDbManager().loadClients());
+        getDbManager().deleteAllClients();
+        getDbManager().insertClients(generateClients());
+        getDbManager().insertGeneratedClientContacts(getDbManager().loadClients());
         this.clientsController.setClientsData(this.getClientsData());
         this.setClientsProfilesData(this.getDbManager().loadClientsProfiles(this));
         this.clientProfilesController.setClientProfilesData(this.getClientsProfilesData());
@@ -206,9 +206,7 @@ public class EnmeterApp extends Application {
 
     //Common function to show the view
     public void loadViewIntoCentralStage(Node node){
-        this.primaryStage.resizableProperty().setValue(true);
         this.rootLayout.setCenter(node);
-        this.primaryStage.resizableProperty().setValue(false);
     }
 
     //Client Details view
@@ -225,6 +223,7 @@ public class EnmeterApp extends Application {
     public void showClientsView(){
         this.clientsController.setClientsData(this.getClientsData());
         this.loadViewIntoCentralStage(this.clientsView);
+        this.clientsController.disableEditDelete(true);
         this.clientsController.selectFirstRow();
     }
 
@@ -256,6 +255,8 @@ public class EnmeterApp extends Application {
         this.setClientsProfilesData(this.getDbManager().loadClientsProfiles(this));
         this.clientProfilesController.setClientProfilesData(this.getClientsProfilesData());
         this.loadViewIntoCentralStage(this.clientProfilesView);
+        this.clientProfilesController.disableEditSelect(true);
+        this.clientProfilesController.selectFirstRow();
     }
 
     //Client Profile details view

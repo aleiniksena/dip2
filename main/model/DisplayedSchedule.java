@@ -1,5 +1,7 @@
 package main.model;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import main.EnmeterApp;
@@ -36,6 +38,10 @@ public class DisplayedSchedule {
     }
 
 
+    public IntegerProperty getClientIdProperty(){
+        return new SimpleIntegerProperty(this.clientId);
+    }
+
     public StringProperty getGymProperty(EnmeterApp mainApp){
         List<Gym> gyms = mainApp.getGymsData();
         StringBuffer buf = new StringBuffer();
@@ -52,12 +58,12 @@ public class DisplayedSchedule {
     public StringProperty getDayProperty(){
         String res;
         switch(wday){
-            case 1: res = "Понедельник"; break;
-            case 2: res = "Вторник"; break;
-            case 3: res = "Среда"; break;
-            case 4: res = "Четверг"; break;
-            case 5: res = "Пятница"; break;
-            case 6: res = "Суббота"; break;
+            case 0: res = "Понедельник"; break;
+            case 1: res = "Вторник"; break;
+            case 2: res = "Среда"; break;
+            case 3: res = "Четверг"; break;
+            case 4: res = "Пятница"; break;
+            case 5: res = "Суббота"; break;
             default: res = "Воскресенье"; break;
 
         };

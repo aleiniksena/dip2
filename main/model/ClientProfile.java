@@ -22,8 +22,11 @@ public class ClientProfile implements Comparable<ClientProfile>{
     private LocalDate programAverageEndDate;
     private LocalDate programPessimisticEndDate;
     private int numberOfTrainingsPerWeek;
-
     private int profileId;
+
+    public ClientProfile(){
+        this.profileId = -1;
+    }
 
     //clientId property
     public int getClientId() {
@@ -95,9 +98,10 @@ public class ClientProfile implements Comparable<ClientProfile>{
 
         switch (colName) {
             case "colName": value =  client.getSurname() + " " + client.getName() + " " + client.getMiddleName(); break;
-            case "colAverageDate": value = CalendarHelper.convertDateToString(this.getAverageTermDate()); break;
+            case "colAverageDate": value = CalendarHelper.convertDateToString(this.getAverageTermDate(getWeightDiff())); break;
             case "colEndWeight": value = String.valueOf(this.getGoalWeight()); break;
-            case "colOptimisticDate": value = CalendarHelper.convertDateToString(this.getOptimisticTermDate()); break;
+            case "colOptimisticDate": value = CalendarHelper.convertDateToString(this.getOptimisticTermDate(getWeightDiff())); break;
+            case "colPessimisticDate": value = CalendarHelper.convertDateToString(this.getPessimisticTermDate(getWeightDiff())); break;
             case "colStartDate": value = CalendarHelper.convertDateToString(this.programStartDate); break;
             case "colStartWeight": value = String.valueOf(this.startWeight); break;
             default: break;
@@ -115,20 +119,29 @@ public class ClientProfile implements Comparable<ClientProfile>{
     }
 
 
-    public LocalDate getOptimisticTermDate(){
-        this.programOptimisticEndDate = CalendarHelper.addMonthsToDate(programStartDate, Constants.optimisticSpeed);
+    private int getCoef(int speed, int val){
+        return (int) Math.round(Math.ceil(val * 1.0 / speed));
+    }
+
+    public int  getWeightDiff() {
+        int weightDiff = Math.abs(this.getGoalWeight() - this.getStartWeight());
+        return weightDiff;
+    }
+
+    public LocalDate getOptimisticTermDate(int weightDiff){
+        this.programOptimisticEndDate = CalendarHelper.addMonthsToDate(programStartDate, getCoef(Constants.optimisticSpeed, weightDiff));
         System.out.println(String.format("Optimistic finish date: %s", CalendarHelper.convertDateToString(this.programOptimisticEndDate)));
         return this.programOptimisticEndDate;
     }
 
-    public LocalDate getPessimisticTermDate(){
-        this.programPessimisticEndDate = CalendarHelper.addMonthsToDate(programStartDate, Constants.pessimisticSpeed);
+    public LocalDate getPessimisticTermDate(int weightDiff){
+        this.programPessimisticEndDate = CalendarHelper.addMonthsToDate(programStartDate, getCoef(Constants.pessimisticSpeed, weightDiff));
         System.out.println(String.format("Pessimistic finish date: %s", CalendarHelper.convertDateToString(programPessimisticEndDate)));
         return this.programPessimisticEndDate;
     }
 
-    public LocalDate getAverageTermDate(){
-        this.programAverageEndDate = CalendarHelper.addMonthsToDate(programStartDate, Constants.averageSpeed);
+    public LocalDate getAverageTermDate(int weightDiff){
+        this.programAverageEndDate = CalendarHelper.addMonthsToDate(programStartDate, getCoef(Constants.averageSpeed, weightDiff));
         System.out.println(String.format("Average finish date: %s", CalendarHelper.convertDateToString(this.programAverageEndDate)));
         return this.programAverageEndDate;
     }
@@ -201,7 +214,8 @@ public class ClientProfile implements Comparable<ClientProfile>{
         double bel = 0;
 
         if (client != null) {
-            if (client.getSex().equals(Constants.sexFemale)) {
+            String sex = client.getSex();
+            if ((sex != null) && sex.equals(Constants.sexFemale)) {
                 bel = 447.593 + this.getGoalWeight() * 9.247 + 3.098 * this.getHeight() - 4.330 * client.getFullAgeYears();
             } else {
                 bel = 88.362 + (13.397 * this.getGoalWeight()) + (4.799 * this.getHeight())

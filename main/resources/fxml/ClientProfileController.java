@@ -70,9 +70,13 @@ public class ClientProfileController extends CommonController {
         this.edit.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent mouseEvent) {
-                List<Client> clients = getMainApp().getClientsData(); //get current clients data
-                getMainApp().getCientProfileDetailsController().setClientsData(clients);
-                getMainApp().showClientProfileDetailsView(currentProfile);
+                ClientProfile current = resultTable.getSelectionModel().getSelectedItem();
+
+                if (current != null) {
+                    List<Client> clients = getMainApp().getClientsData(); //get current clients data
+                    getMainApp().getCientProfileDetailsController().setClientsData(clients);
+                    getMainApp().showClientProfileDetailsView(currentProfile);
+                }
             }
         });
 
@@ -93,7 +97,20 @@ public class ClientProfileController extends CommonController {
             @Override
             public void handle(MouseEvent event) {
                 currentProfile = resultTable.getSelectionModel().getSelectedItem();
+                disableEditSelect(currentProfile == null);
             }
         });
+        disableEditSelect(true);
+    }
+
+    public void disableEditSelect(boolean disable){
+        delete.setDisable(disable);
+        edit.setDisable(disable);
+    }
+
+    public void selectFirstRow(){
+        if (this.profileData.size() > 0) {
+            resultTable.getSelectionModel().select(0);
+        }
     }
 }

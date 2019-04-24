@@ -8,11 +8,9 @@ import main.model.ClientProfile;
 import main.model.DisplayedSchedule;
 import main.model.Gym;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 
 public class DbManager {
 
@@ -96,7 +94,6 @@ public class DbManager {
 
     private void updateClientActivityStatus(int clientId){
         try{
-
             Statement stmtSchedule = this.getConnection().createStatement();
             String sqlQuery = String.format(Constants.sqlUpdateClientActivityStatus, clientId, clientId);
             System.out.println(sqlQuery);
@@ -114,12 +111,10 @@ public class DbManager {
         try{
 
             Statement stmtSchedule = this.getConnection().createStatement();
-
-            //"INSERT INTO schedule (client_id, gym_id, time, wday) VALUES";
-            StringBuffer sqlQuery = new StringBuffer(Constants.sqlInsertSchedule);
-            sqlQuery.append(String.format("('%s', '%s', '%s', '%s');", s.getClientId(), s.getGymId(),
-                        s.getTime(), s.getWday()));
-            stmtSchedule.executeUpdate(sqlQuery.toString());
+            //INSERT INTO client_gym_schedule (client_id, gym_id, time, wday) VALUES ('%s', '%s', '%s', '%s');
+            String sqlQuery = String.format(Constants.sqlInsertSchedule, s.getClientId(), s.getGymId(),
+                        s.getTime(), s.getWday());
+            stmtSchedule.executeUpdate(sqlQuery);
             stmtSchedule.close();
 
             //Update client activity status
@@ -135,7 +130,6 @@ public class DbManager {
 
     //Load all schedules from database
     public List<DisplayedSchedule> loadSchedules(){
-
         List<DisplayedSchedule> result = new ArrayList<DisplayedSchedule>();
         try{
             PreparedStatement stmt = this.getConnection().prepareStatement(Constants.sqlGetAllSchedules);
@@ -161,7 +155,6 @@ public class DbManager {
 
     //Load all client profiles from database
     public List<ClientProfile> loadClientsProfiles(EnmeterApp main){
-
         List<ClientProfile> result = new ArrayList<ClientProfile>();
         try{
             PreparedStatement stmt = this.getConnection().prepareStatement(Constants.sqlGetAllClientsProfiles);
@@ -172,7 +165,7 @@ public class DbManager {
                 c.setClientId(res.getInt("client_id"));
                 c.setProfileId(res.getInt("profile_id"));
                 c.setHeight(res.getInt("height"));
-                c.setStartTerm(LocalDate.parse(res.getString("start_date")));
+                c.setStartTerm(CalendarHelper.parseDate(res.getString("start_date")));
                 c.setStartWeight(res.getInt("start_weight"));
                 c.setGoalWeight(res.getInt("goal"));
                 c.setMainApp(main);
@@ -210,7 +203,6 @@ public class DbManager {
 
     //delete all data from client
     public void deleteAllClients(){
-
         try {
             PreparedStatement stmt = this.getConnection().prepareStatement(Constants.sqlDeleteAllClients);
             stmt.execute();
@@ -219,29 +211,22 @@ public class DbManager {
         }finally {
             closeConnection();
         }
-
     }
 
     //Delete the specified client from the database
     public void deleteClient(Client client){
         try {
-            StringBuffer sqlQuery;
             Statement stmtClient = this.getConnection().createStatement();
+            String sqlQuery = String.format(Constants.sqlDeleteClient, client.getId());
+            System.out.println(sqlQuery);
+            stmtClient.executeUpdate(sqlQuery);
 
-            sqlQuery = new StringBuffer();
-            sqlQuery.append(String.format(Constants.sqlDeleteClient,
-                client.getId()));
+            ResultSet r = stmtClient.getGeneratedKeys();
 
-                System.out.println(sqlQuery.toString());
-                stmtClient.executeUpdate(sqlQuery.toString());
-
-                ResultSet r = stmtClient.getGeneratedKeys();
-
-                if (r.next()){
-                    int id = r.getInt(1);
-                    System.out.println("Deleted id -" + id); // display inserted record
-                }
-
+            if (r.next()){
+                int id = r.getInt(1);
+                System.out.println("Deleted id -" + id); // display inserted record
+            }
             stmtClient.close();
         }catch (SQLException e) {
             e.printStackTrace();
@@ -253,15 +238,11 @@ public class DbManager {
 
     public void deleteClientProfile(int profId){
         try {
-            StringBuffer sqlQuery;
             Statement stmt = this.getConnection().createStatement();
-
-            sqlQuery = new StringBuffer();
             //sqlDeleteSchedule = "DELETE FROM schedule WHERE client_id = %d AND gym_id = %d AND wday = %d AND time ='%s';";
-            sqlQuery.append(String.format(Constants.sqlDeleteClientProfile, profId));
-
-            System.out.println(sqlQuery.toString());
-            stmt.executeUpdate(sqlQuery.toString());
+            String sqlQuery = String.format(Constants.sqlDeleteClientProfile, profId);
+            System.out.println(sqlQuery);
+            stmt.executeUpdate(sqlQuery);
 
             ResultSet r = stmt.getGeneratedKeys();
 
@@ -269,7 +250,6 @@ public class DbManager {
                 int id = r.getInt(1);
                 System.out.println("Deleted id -" + id); // display inserted record
             }
-
             stmt.close();
         }catch (SQLException e) {
             e.printStackTrace();
@@ -282,16 +262,13 @@ public class DbManager {
     //Delete the specified scheduled from database
     public void deleteSchedule(DisplayedSchedule sc){
         try {
-            StringBuffer sqlQuery;
             Statement stmtClient = this.getConnection().createStatement();
 
-            sqlQuery = new StringBuffer();
             //sqlDeleteSchedule = "DELETE FROM schedule WHERE client_id = %d AND gym_id = %d AND wday = %d AND time ='%s';";
-            sqlQuery.append(String.format(Constants.sqlDeleteSchedule,
-                    sc.getClientId(), sc.getGymId(), sc.getWday(), sc.getTime()));
+            String sqlQuery = String.format(Constants.sqlDeleteSchedule, sc.getClientId(), sc.getGymId(), sc.getWday(), sc.getTime());
+            System.out.println(sqlQuery);
 
-            System.out.println(sqlQuery.toString());
-            stmtClient.executeUpdate(sqlQuery.toString());
+            stmtClient.executeUpdate(sqlQuery);
 
             ResultSet r = stmtClient.getGeneratedKeys();
 
@@ -327,15 +304,14 @@ public class DbManager {
     //Store gyms
     public void insertGyms(List<Gym> gyms){
         try{
-            StringBuffer sqlQuery;
+            String sqlQuery;
             Statement stmtGym = this.getConnection().createStatement();
 
             for (Gym g : gyms){
-                sqlQuery = new StringBuffer(Constants.sqlInsertGym);
-
-                sqlQuery.append(String.format("('%s', '%s', '%s', '%s');", g.getName(), g.getAddress(),
-                        g.getSchedule(), g.getPhone()));
-                stmtGym.executeUpdate(sqlQuery.toString());
+                sqlQuery = String.format(Constants.sqlInsertGym, g.getName(), g.getAddress(),
+                        g.getSchedule(), g.getPhone());
+                System.out.println(sqlQuery);
+                stmtGym.executeUpdate(sqlQuery);
             }
             stmtGym.close();
 
@@ -375,38 +351,8 @@ public class DbManager {
 
     //Save clients
     public void insertClients(List<Client> clients){
-        try {
-            StringBuffer sqlQuery;
-            Statement stmtClient = this.getConnection().createStatement();
-
-            for (Client client : clients) {
-                sqlQuery = new StringBuffer(Constants.sqlInsertClients1);
-                sqlQuery.append(String.format("('%s', '%s', '%s', '%s', '%s', '%s', '%s');",
-                        client.getName(),
-                        client.getSurname(),
-                        client.getMiddleName(),
-                        CalendarHelper.convertDateToString(client.getBirthDate()),
-                        CalendarHelper.convertDateToString(client.getRegistrationDate()),
-                        client.getSex(),
-                        client.isActive()));
-
-                System.out.println(sqlQuery.toString());
-                stmtClient.executeUpdate(sqlQuery.toString());
-
-                ResultSet r = stmtClient.getGeneratedKeys();
-
-                if (r.next()){
-                    int id = r.getInt(1);
-                    System.out.println("Inserted ID -" + id); // display inserted record
-                }
-            }
-
-            stmtClient.close();
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
-        finally {
-            closeConnection();
+        for (Client client : clients) {
+            insertClient(client);
         }
     }
 
@@ -414,21 +360,18 @@ public class DbManager {
     public int insertClient(Client client){
         int resultId = -1;
         try {
-            StringBuffer sqlQuery;
             Statement stmtClient = this.getConnection().createStatement();
-
-                sqlQuery = new StringBuffer(Constants.sqlInsertClients1);
-                sqlQuery.append(String.format("('%s', '%s', '%s', '%s', '%s', '%s', '%s');",
+            String sqlQuery = String.format(Constants.sqlInsertClients1,
                         client.getName(),
                         client.getSurname(),
                         client.getMiddleName(),
                         CalendarHelper.convertDateToString(client.getBirthDate()),
                         CalendarHelper.convertDateToString(client.getRegistrationDate()),
                         client.getSex(),
-                        client.isActive()));
+                        client.isActive());
 
-                System.out.println(sqlQuery.toString());
-                stmtClient.executeUpdate(sqlQuery.toString());
+                System.out.println(sqlQuery);
+                stmtClient.executeUpdate(sqlQuery);
 
                 ResultSet r = stmtClient.getGeneratedKeys();
 
@@ -450,41 +393,35 @@ public class DbManager {
 
     //Update client
     public void updateClient(Client client){
-
         try {
-            StringBuffer sqlQuery;
             Statement stmtClient = this.getConnection().createStatement();
-
-            //"UPDATE client SET name='%s', surname = '%s', middlename='%s', birthdate='%s', sex='%s', active='%s' WHERE id=%d;";
-            sqlQuery = new StringBuffer();
-
             if (client.getId() > -1) { //Обновляем существующего клиента
-                sqlQuery.append(String.format(Constants.sqlUpdateClient,
+                //"UPDATE client SET name='%s', surname = '%s', middlename='%s', birthdate='%s', sex='%s', active='%s' WHERE id=%d;";
+                String sqlQuery = String.format(Constants.sqlUpdateClient,
                         client.getName(),
                         client.getSurname(),
                         client.getMiddleName(),
                         CalendarHelper.convertDateToString(client.getBirthDate()),
                         client.getSex(),
                         client.isActive() ? 1 : 0,
-                        client.getId()
-                ));
+                        client.getId());
 
-                System.out.println(sqlQuery.toString());
-                stmtClient.executeUpdate(sqlQuery.toString());
+                System.out.println(sqlQuery);
+                stmtClient.executeUpdate(sqlQuery);
 
                 ResultSet r = stmtClient.getGeneratedKeys();
 
-                if (r.next()){
+                /*if (r.next()){
                     int id = r.getInt(1);
                     System.out.println("Updated ID -" + id); // display inserted record
-                }
+                }*/
                 stmtClient.close();
                 updateClientContacts(client);
 
             } else{ //Добавляем нового клиента
                 int nc = insertClient(client);
                 client.setId(nc);
-                insertClientContact(client);
+                insertClientContacts(client);
             }
 
         }catch (SQLException e) {
@@ -497,22 +434,17 @@ public class DbManager {
 
     //Update client profile
     public void updateClientProfile(ClientProfile profile){
-
         try {
-            StringBuffer sqlQuery;
             Statement stmtClient = this.getConnection().createStatement();
 
             //"UPDATE client_profile SET height='%d', start_date = '%s', start_weight='%d', goal='%d' WHERE profile_id=%d;"
-            sqlQuery = new StringBuffer();
-
             if (profile.getProfileId() > -1) { //Обновляем существующий профиль клиента
-                sqlQuery.append(String.format(Constants.sqlUpdateClientProfile,
+                String sqlQuery = String.format(Constants.sqlUpdateClientProfile,
                         profile.getHeight(),
                         CalendarHelper.convertDateToString(profile.getProgramStartDate()),
                         profile.getStartWeight(),
                         profile.getGoalWeight(),
-                        profile.getProfileId()
-                ));
+                        profile.getProfileId());
 
                 System.out.println(sqlQuery.toString());
                 stmtClient.executeUpdate(sqlQuery.toString());
@@ -542,21 +474,17 @@ public class DbManager {
     public int insertClientProfile(ClientProfile profile){
         int resultId = -1;
         try {
-            StringBuffer sqlQuery;
             Statement stmtClient = this.getConnection().createStatement();
-
-            sqlQuery = new StringBuffer(Constants.sqlInsertClientsProfile);
-            ////"INSERT INTO client_profile (client_id, profile_id, height, start_date, start_weight, goal) VALUES"
-            sqlQuery.append(String.format("('%d', '%d', '%d', '%d', '%s', '%d', '%d');",
+            ////"INSERT INTO client_profile (client_id, height, start_date, start_weight, goal) VALUES"
+            String sqlQuery = String.format(Constants.sqlInsertClientsProfile,
                    profile.getClientId(),
-                    profile.getProfileId(),
                     profile.getHeight(),
-                    profile.getProgramStartDate().toString(),
+                    CalendarHelper.convertDateToString(profile.getProgramStartDate()),
                     profile.getStartWeight(),
-                    profile.getGoalWeight()));
+                    profile.getGoalWeight());
 
-            System.out.println(sqlQuery.toString());
-            stmtClient.executeUpdate(sqlQuery.toString());
+            System.out.println(sqlQuery);
+            stmtClient.executeUpdate(sqlQuery);
 
             ResultSet r = stmtClient.getGeneratedKeys();
 
@@ -575,101 +503,55 @@ public class DbManager {
         return resultId;
     }
 
+    private void modifyContact(int clientId, int contactType, String val, boolean isNew){
+        try {
+            Statement stmtClientContact = this.getConnection().createStatement();
+            String template = isNew ? Constants.sqlInsertClientContacts : Constants.sqlUpdateClientContacts;
 
+            //"UPDATE client_contact SET contact = '%s' WHERE client_id = %d AND contypeid = %d";
+            //"INSERT INTO client_contact (contact, client_id, contypeid) VALUES ('%s', %d, %d);";
+            String sqlQuery = String.format(template,
+                    val,
+                    clientId,
+                    contactType);
 
-    //Save clients contat for 1st time
-    public void insertClientContact(Client client){
-        try{
-            StringBuffer sqlQuery;
-            Statement stmtClientContact = this. getConnection().createStatement();
-            sqlQuery = new StringBuffer(Constants.sqlStoreClientContacts);
-            sqlQuery.append(String.format("(%d, %d, '%s');",
-                        client.getId(),
-                        1,
-                        client.getEmail()));
-
-            System.out.println(sqlQuery.toString());
-            stmtClientContact.execute(sqlQuery.toString());
-
-            sqlQuery = new StringBuffer(Constants.sqlStoreClientContacts);
-            sqlQuery.append(String.format("(%d, %d, '%s');",
-                        client.getId(),
-                        2,
-                        client.getPhone()));
-
-            System.out.println(sqlQuery.toString());
-            stmtClientContact.execute(sqlQuery.toString());
-
+            System.out.println(sqlQuery);
+            stmtClientContact.execute(sqlQuery);
         }catch (SQLException e) {
             e.printStackTrace();
         }
         finally {
             closeConnection();
         }
+    }
+
+    //Save clients contat for 1st time
+    public void insertClientContacts(Client client){
+        modifyContact(client.getId(), 1, client.getEmail(), true);
+        modifyContact(client.getId(), 2, client.getPhone(), true);
     }
 
     //Update existing clients contact data
     public void updateClientContacts(Client client){
-        try{
-            Statement stmtClientContact = this.getConnection().createStatement();
-
-                String query = String.format(Constants.sqlUpdateClientContacts, client.getEmail(), client.getId(), 1 );
-                System.out.println(query);
-                stmtClientContact.executeUpdate(query);
-
-                query = String.format(Constants.sqlUpdateClientContacts, client.getPhone(), client.getId(), 2 );
-                System.out.println(query);
-                stmtClientContact.executeUpdate(query);
-
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
-        finally {
-            closeConnection();
-        }
+        modifyContact(client.getId(), 1, client.getEmail(), false);
+        modifyContact(client.getId(), 2, client.getPhone(), false);
     }
 
     //Save clients contats for 1st time
-    public void insertClientContacts(List<Client> clients){
-        try{
-            StringBuffer sqlQuery;
-            Statement stmtClientContact = this. getConnection().createStatement();
-            Random rand = new Random();
+    public void insertGeneratedClientContacts(List<Client> clients){
+        Random rand = new Random();
 
-            for (Client client : clients){
-                client.setEmail(client.getName().substring(0, 3) + client.getSurname().substring(0, 4) + "@mail.ru");
+        for (Client client : clients){
+            client.setEmail(client.getName().substring(0, 3) + client.getSurname().substring(0, 4) + "@mail.ru");
 
-                StringBuffer phone = new StringBuffer("+375");
+            StringBuffer phone = new StringBuffer("+375");
 
-                while (phone.length() < 13){
-                    phone.append(rand.nextInt(10));
-                }
-
-                client.setPhone(phone.toString());
-                sqlQuery = new StringBuffer(Constants.sqlStoreClientContacts);
-                sqlQuery.append(String.format("(%d, %d, '%s');",
-                        client.getId(),
-                        1,
-                        client.getEmail()));
-
-                System.out.println(sqlQuery.toString());
-                stmtClientContact.executeUpdate(sqlQuery.toString());
-
-                sqlQuery = new StringBuffer(Constants.sqlStoreClientContacts);
-                sqlQuery.append(String.format("(%d, %d, '%s');",
-                        client.getId(),
-                        2,
-                        client.getPhone()));
-
-                System.out.println(sqlQuery.toString());
-                stmtClientContact.executeUpdate(sqlQuery.toString());
+            while (phone.length() < 13){
+                phone.append(rand.nextInt(10));
             }
 
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
-        finally {
-            closeConnection();
+            client.setPhone(phone.toString());
+            insertClientContacts(client);
         }
     }
 
@@ -678,10 +560,13 @@ public class DbManager {
         boolean result = false;
 
         try {
-            PreparedStatement stmt = this.getConnection().prepareStatement(Constants.sqlCheckUser);
-            stmt.setString(1, login);
-            stmt.setString(2, password);
-            ResultSet res = stmt.executeQuery();
+            Statement stmtUser = this.getConnection().createStatement();
+            String sqlQuery = String.format(Constants.sqlCheckUser,
+                    login,
+                    password);
+
+            System.out.println(sqlQuery);
+            ResultSet res = stmtUser.executeQuery(sqlQuery);
 
             while (res.next()){
                 if (res.getInt(1) == 1)

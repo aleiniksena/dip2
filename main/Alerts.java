@@ -15,9 +15,9 @@ public class Alerts {
         return result.get();
     }
 
-    public static void showInvalidDataAlert(){
+    public static void showInvalidDataAlert(String content){
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setContentText(Constants.msgDataErrorTitle);
+        alert.setContentText(Constants.msgDataErrorTitle + ": " + content);
         alert.setTitle(Constants.msgDataErrorTitle);
         alert.setHeaderText(Constants.msgFillDataEror);
         alert.showAndWait();

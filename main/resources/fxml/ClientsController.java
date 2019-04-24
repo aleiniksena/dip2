@@ -99,6 +99,7 @@ public class ClientsController extends CommonController{
             if (newSelection != null) {
                 currentClient = resultTable.getSelectionModel().getSelectedItem();
                 syncFields();
+                disableEditDelete(false);
             }
         });
 
@@ -131,6 +132,13 @@ public class ClientsController extends CommonController{
 
         reloadTable();
         syncFields();
+        disableEditDelete(true);
+    }
+
+
+    public void disableEditDelete(boolean disable){
+        deleteButton.setDisable(disable);
+        editButton.setDisable(disable);
     }
 
     private void reloadTable(){
